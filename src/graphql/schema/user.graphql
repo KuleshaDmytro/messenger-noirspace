@@ -1,0 +1,27 @@
+type User {
+  password: String!
+  id: ID!
+  email: String!
+  name: String!
+  nickName: String
+  friends: [User!]!
+  sentMessages: [Message!]!
+  receivedMessages: [Message!]!
+  sentFriendRequests: [FriendRequest!]!
+  receivedFriendRequests: [FriendRequest!]!
+}
+
+extend type Query {
+  users: [User!]!
+  searchUsers(query: String!): [User!]!
+  me: User!
+}
+
+extend type Mutation {
+  createUser(
+    email: String!,
+    name: String!,
+    password: String!,
+    nickName: String
+  ): User!
+}
