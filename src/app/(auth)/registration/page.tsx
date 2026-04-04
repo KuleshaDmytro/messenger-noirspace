@@ -7,9 +7,6 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { gql, useMutation } from "@apollo/client";
-// import { REGISTER_USER } from "@/graphql/mutations";
-
 import {
     Box,
     Button,
@@ -18,8 +15,8 @@ import {
     Typography,
 } from "@mui/material";
 import Grid from "@mui/material/Grid";
-import router from "next/router";
 import { useCreateUser } from "./hooks/useCreateUser";
+import { useRouter } from "next/navigation";
 
 
 const schema = z.object({
@@ -48,7 +45,8 @@ export default function RegistrationPage() {
     });
 
     const { createUser, loading, error } = useCreateUser();
-
+    const router = useRouter();
+    
     const onSubmit = async (data: RegistrationForm) => {
             
         try{   
@@ -82,14 +80,15 @@ export default function RegistrationPage() {
                 // backgroundColor: '#121212',
             }}
             >
-            {/* <Typography
-                variant="h4"
+          <Typography
                 align="center"
                 gutterBottom
-                sx={{ color: '#FFD700' }}
+                fontFamily={'Audiowide, cursive'}
+                fontSize={24}
+                // sx={{ color: theme.palette.primary.main }}
             >
                 Sign-up
-            </Typography> */}
+            </Typography>
             <form onSubmit={handleSubmit(onSubmit)} noValidate>
                 <Grid container spacing={1}>
                 <TextField

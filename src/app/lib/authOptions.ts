@@ -1,6 +1,7 @@
 import CredentialsProvider from "next-auth/providers/credentials"
 import { prisma } from "./prisma"
 import bcrypt from "bcrypt";
+import { ID } from "graphql-ws";
 
 export const authOptions = {
   providers: [
@@ -35,17 +36,16 @@ export const authOptions = {
 
   callbacks: {
     async jwt({ token, user } : { token: any; user: any }) {
-      // при логіні додаємо дані з user у токен
       if (user) {
         token.id = user.id;
         token.nickName = user.nickName;
       }
       return token;
     },
+
     async session({ session, token } : { session: any; token: any }) {
-      // при формуванні сесії додаємо дані з токена
       if (token) {
-        session.user.id = token.id as string;
+        session.user.id = token.id as ID;
         session.user.nickName = token.nickName as string;
       }
       return session;

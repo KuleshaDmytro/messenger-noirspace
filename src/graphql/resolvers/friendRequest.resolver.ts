@@ -11,3 +11,4 @@ export const friendRequestResolvers = {
         declineFriendRequest: (_: any, args: { requestId: string }, ctx: Context) => friendRequestService.declineFriendRequest(_, args, ctx),
     }
 }
+

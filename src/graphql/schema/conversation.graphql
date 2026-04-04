@@ -1,0 +1,9 @@
+type Conversation {
+  id: ID!
+  createdAt: String!
+  directKey: String
+}
+
+extend type Query {
+  getOrCreateDirectConversation(friendId: ID!): Conversation!
+}

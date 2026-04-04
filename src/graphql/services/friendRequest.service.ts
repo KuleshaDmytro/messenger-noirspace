@@ -1,6 +1,7 @@
 import { prisma } from "../../app/lib/prisma";
 import { Context } from "../context";
 import { UnauthorizedError } from "../errors/UnauthorizedError";
+import { friendService } from "./friend.service";
 
 export const friendRequestService = {
     friendsRequests: (_: any, { id }: { id: string }, ctx: Context) => {
@@ -48,12 +49,13 @@ export const friendRequestService = {
     },
 
     acceptFriendRequest: async (_: any, args: { requestId: string }, ctx: Context) => {
-        if (!ctx.session) throw new UnauthorizedError();
-
+        if (!ctx.session) throw new UnauthorizedError();        
         const request = await prisma.friendRequest.findUnique({ where: { id: args.requestId } });
+
         if (!request) throw new Error("Friend request not found");
         if (request.status !== "PENDING") throw new Error("Friend request is not pending");
-
+        console.log(`STATATUS!!!`, request.status);
+        
         await prisma.friendRequest.update({
             where: { id: args.requestId },
             data: { status: "ACCEPTED" }
@@ -65,6 +67,32 @@ export const friendRequestService = {
             { userId: request.toUserId, friendId: request.fromUserId }
         ]
         });
+
+        const friendA = await prisma.friend.findFirst({
+            where: { 
+                userId: request.fromUserId,
+                friendId: request.toUserId,
+             },
+            select: {
+                id: true,
+                friend: true,
+                createdAt: true
+            },
+        });
+
+        const friendB = await prisma.friend.findFirst({
+            where: { 
+                userId: request.toUserId,
+                friendId: request.fromUserId,
+            },
+            select: {
+                id: true,
+                friend: true,
+                createdAt: true
+            },
+        });
+        
+        await friendService.notifyFriendAdded(request.fromUserId, request.toUserId, friendA, friendB);
 
         return prisma.user.findUnique({
             where: { id: request.toUserId },

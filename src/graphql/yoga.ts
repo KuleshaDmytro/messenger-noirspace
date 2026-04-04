@@ -1,20 +1,20 @@
-import { createYoga, createSchema } from "graphql-yoga";
-import { typeDefs } from "./schema";
-import { resolvers } from "./resolvers";
+import { createYoga } from "graphql-yoga";
 import { createContext } from "./context";
+import { schema } from "./schema/index";
 
 export const config = {
   api: { bodyParser: false },
 };
 
-const yoga = createYoga({
-  schema: createSchema({
-    typeDefs,
-    resolvers,
-  }),
+console.log(`YOGA`, schema.getSubscriptionType()?.getFields());
+
+export const yoga = createYoga({
+  schema,
   context: createContext,
   graphqlEndpoint: process.env.API_GRAPHQL_URL ?? "/api/graphql",
-  graphiql: true,
+  graphiql: {
+      subscriptionsProtocol: "WS",
+  },
   fetchAPI: { Request, Response },
 });
 

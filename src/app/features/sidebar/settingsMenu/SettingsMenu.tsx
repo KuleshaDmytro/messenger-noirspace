@@ -19,10 +19,8 @@ import InstallMobileIcon from "@mui/icons-material/InstallMobile";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 import EmailIcon from '@mui/icons-material/Email';
 import MarkEmailUnreadIcon from '@mui/icons-material/MarkEmailUnread';
+import { useSidebarContext } from "@/app/hooks/useSidebarContext";
 
-import { useContext } from "react";
-
-import { SidebarContext } from "@/app/features/sidebar/Sidebar";
 import { FriendRequests } from "../friends/FriendRequests";
 
 type SettingItem = {
@@ -33,19 +31,9 @@ type SettingItem = {
   onClick?: () => void;
 };
 
-export default function SettingsMenu({
-  anchorEl,
-  open,
-  onClose,
-}: {
-  anchorEl: null | HTMLElement;
-  open: boolean;
-  onClose: () => void;
-}) {
+export default function SettingsMenu() {
 
-  const context = useContext(SidebarContext);
-  if (!context) throw new Error("No MenuContext provided");
-  const { showFriendsRequests, setShowFriendsRequests, setQuery } = context;
+  const { activeMenuView, setActiveMenuView, setQuery, handleMenuClose, anchorEl } = useSidebarContext();
 
   const settings: SettingItem[] = [
     { 
@@ -53,8 +41,9 @@ export default function SettingsMenu({
       icon: false ? <MarkEmailUnreadIcon /> : <EmailIcon />,
       onClick: () => {
         setQuery('')
-        onClose();
-        setShowFriendsRequests((prev: boolean) => !prev);
+        // setShowFriendsRequests((prev: boolean) => !prev);
+        setActiveMenuView('FriendRequest')
+        handleMenuClose();
       }
     },
     { label: "Add Account", icon: <AccountCircleIcon /> },
@@ -73,8 +62,8 @@ export default function SettingsMenu({
     <>
       <Menu
         anchorEl={anchorEl}
-        open={open}
-        onClose={onClose}
+        open={Boolean(anchorEl)}
+        onClose={handleMenuClose}
         PaperProps={{
           sx: {
             bgcolor: "rgba(30, 30, 30, 0.5)", 
@@ -88,9 +77,11 @@ export default function SettingsMenu({
           },
         }}
       >
+        
         {settings.map((setting, idx) => (
           <MenuItem
             key={idx}
+            className={'SettingMenu'}
             onClick={setting.type !== "switch" ? setting.onClick : undefined}
             sx={{
               display: "flex",
@@ -119,13 +110,13 @@ export default function SettingsMenu({
             )}
           </MenuItem>
         ))}
+        
       </Menu>
 
-      {showFriendsRequests && (
-
+      { activeMenuView === 'FriendRequest' && (
         <FriendRequests />
-
       )}
+
     </>
   );
 }

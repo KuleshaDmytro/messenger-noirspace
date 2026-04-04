@@ -6,11 +6,11 @@ type FriendRequest {
     createdAt: String!
 }
 
-extend type Query {
+type Query {
   friendsRequests(id: String!): [FriendRequest!]!
 }
 
-extend type Mutation {
+type Mutation {
   sendFriendRequest(fromUserId: String!, toUserId: String!): FriendRequest!
   acceptFriendRequest(requestId: String!): User!
   declineFriendRequest(requestId: String!): User!

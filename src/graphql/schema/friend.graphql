@@ -5,6 +5,11 @@ type Friend{
   createdAt: String!
 }
 
-extend type Query {
+type Query {
   getFriends(id: String!): [Friend!]!
 }
+
+type Mutation {
+  deleteFriend(friendId: String!): Boolean!
+}
+

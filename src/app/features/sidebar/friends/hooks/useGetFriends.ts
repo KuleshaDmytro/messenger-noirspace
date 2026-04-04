@@ -1,6 +1,8 @@
 import { useSession } from "next-auth/react";
 import { GET_FRIENDS } from "../api/getFriends";
 import { useTypedQuery } from "@/app/hooks/useTypedQuery";
+import { useSubscription } from "@apollo/client";
+import { FRIEND_ADDED } from "../api/onFriendsChanged";
 
 type friendsData = {
   getFriends: Array<{
@@ -23,12 +25,13 @@ type friendsVars = {
 
 export const useGetFriends = () => {
     const { data: session } = useSession();
-
+    const id = session?.user.id ?? "";
+  
     const { data, loading, error } = useTypedQuery<friendsData, friendsVars>(GET_FRIENDS, {
-        variables: { id: session?.user.id ?? "" },
-        skip: !session?.user.id,
+        variables: { id},
+        skip: !id,
     });
-    ``
+
     return {
         friends: data?.getFriends || [],
         loading,

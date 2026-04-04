@@ -3,5 +3,4 @@ import React from "react";
 
 const ChatPage = () => <Conversation/>;
 
-
 export default ChatPage;

@@ -7,6 +7,7 @@ export const SEARCH_USERS = gql`
             email
             name
             nickName
+            isFriend
         }
     }
 `

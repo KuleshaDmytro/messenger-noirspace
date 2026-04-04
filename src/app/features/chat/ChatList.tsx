@@ -1,44 +1,63 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import { LinearProgress } from "@mui/material";
 
 import ChatListItem from "./ChatListItem";
-import { useGetFriends } from "../sidebar/friends/hooks/useGetFriends";
+import { useRealtimeFriends } from "./hooks/useRealtimeFriends";
+import { useRouter } from "next/navigation";
+import { useDirectConversation } from "../conversation/hooks/useDirectConversation";
 
 export const ChatList = () => {
 
-    const {friends, loading, error} = useGetFriends();
+    const [activeFriendId, setActiveFriendId] = useState<string | null>(null);
+    const { friends, loading, error} = useRealtimeFriends();
+    const router = useRouter();
+
+    const { openConversation } = useDirectConversation();
+
+    const onFriendClick = async (friendId: string) => {
+        const res = await openConversation({ variables: { friendId } });
+        setActiveFriendId(friendId);
+        
+        const conversationId = res.data?.getOrCreateDirectConversation.id;
+        if (!conversationId) return;
+
+        router.push(`/chat/${conversationId}`);
+    };
 
     return (
-        <>
+        <Box
+            style={{
+                overflow: 'auto'
+            }}
+        >
             {loading && <LinearProgress />}
-
-            {!error ? (
-                friends.map((friendObj) => {
+            {error && <Box>Error loading friends</Box>}
+            
+            {friends.map((friendObj) => 
+                {
                     const { friend } = friendObj;
                     return (
-                    <Box
-                        key={friendObj.id}
-                        sx={{
-                        mx: 1.5,
-                        }}
-                    >
-                        <ChatListItem
-                        key={friend.id}
-                        userName={friend.name}
-                        lastMessage="Last message preview"
-                        photoUrl={friend.avatarUrl}
-                        // id={friend.id}
-                        onClick={() => {
-                            // handle click, e.g., select chat
-                        }}
-                        />
-                    </Box>
+                        <Box
+                            key={friendObj.friend.id}
+                            sx={{
+                                mx: 1.5,
+                                py: 0.5,
+                            }}
+                        >
+                            <ChatListItem
+                                key={friend.id}
+                                id={friend.id}
+                                userName={friend.name}
+                                isActive={friend.id === activeFriendId}
+                                lastMessage="Last message preview"
+                                photoUrl={friend.avatarUrl}
+                                onClick={() => onFriendClick(friend.id)}
+                            />
+                        </Box>
                     );
                 })
-            ) : (
-            <Box>Error loading friends</Box>
-            )}
-        </>
+            }
+        </Box>
     );
 };

@@ -1,23 +1,21 @@
 import {Box, InputBase,LinearProgress,Paper } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 
-import { useCallback, useContext } from 'react';
+import { useCallback } from 'react';
 
 import ChatListItem from '@/app/features/chat/ChatListItem';
-import { SidebarContext } from '@/app/features/sidebar/Sidebar';
 import { useSearchUsers } from './hooks/useSearchUsers';
 import { OverlayMenuPaper } from '@/app/components/OverlayMenuPaper/OverlayMenuPaper';
+import { useSidebarContext } from '@/app/hooks/useSidebarContext';
 
 const SearchField: React.FC = () => {
 
-    const context = useContext(SidebarContext);
-    if (!context) throw new Error("No MenuContext provided");
-    const { query, setQuery, setShowFriendsRequests } = context;
+    const { query, setQuery, setActiveMenuView } = useSidebarContext();
 
    const { data, loading } = useSearchUsers({ query });
 
     const handleSearch = useCallback((value: string) => {
-        setShowFriendsRequests(false);
+        setActiveMenuView('none');
         setQuery(value);
     }, []);
 
@@ -77,7 +75,7 @@ const SearchField: React.FC = () => {
                                 cursor: "pointer",
                             }}
                         >
-                            <ChatListItem userName={user.name} photoUrl={user.photoUrl} id={user.id} newFriend={true}/>
+                            <ChatListItem userName={user.name} photoUrl={user.photoUrl} id={user.id} newFriend={!user.isFriend} isActive={false} />
                         </Box>
                     ))}
                     {!loading && !data?.searchUsers && (

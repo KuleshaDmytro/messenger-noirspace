@@ -4,14 +4,22 @@ import { Box, IconButton, InputBase, Paper } from "@mui/material";
 import EmojiEmotionsOutlinedIcon from "@mui/icons-material/EmojiEmotionsOutlined";
 import AttachFileOutlinedIcon from "@mui/icons-material/AttachFileOutlined";
 import SendIcon from "@mui/icons-material/Send";
+import { useParams } from "next/navigation";
+import { useSendMessage } from "./hooks/useSendMessage";
 
 const MessageInput: React.FC = () => {
   const [message, setMessage] = useState("");
 
-  const handleSend = () => {
+  const params = useParams();
+  const conversationId = params.id as string;
+  const { sendMessage, loading } = useSendMessage(conversationId);
+
+  const handleSend = async () => {
+    if (!message) return;
+
     if (message.trim()) {
-      console.log("Send:", message);
-      setMessage("");
+        await sendMessage(message);
+        setMessage("");
     }
   };
 
@@ -20,24 +28,29 @@ const MessageInput: React.FC = () => {
         sx={{
             display: "flex",
             alignItems: "center",
+            mb: 2,
+            px: 1, 
+            position: "sticky",
+            bottom: 0,
+            backdropFilter: 'blur(3px)',
+            borderRadius: '16px',
         }}
     >
         <Paper
             elevation={0}
             sx={{
                 p: "4px 8px",
+                
                 borderRadius: "24px",
                 backgroundColor: "background.paper",
                 color: "white",
                 width: "100%",
         }}
         >
-        {/* Emoji */}
         <IconButton size="small" sx={{ color: "gray" }}>
             <EmojiEmotionsOutlinedIcon />
         </IconButton>
 
-        {/* Input */}
         <InputBase
             placeholder="Message"
             value={message}
@@ -53,7 +66,6 @@ const MessageInput: React.FC = () => {
             }}
         />
 
-        {/* Attach file */}
         <IconButton size="small" sx={{ color: "gray" }}>
             <AttachFileOutlinedIcon />
         </IconButton>
@@ -61,7 +73,6 @@ const MessageInput: React.FC = () => {
 
         </Paper>
 
-        {/* Send */}
         <IconButton
             size="medium"
             sx={{

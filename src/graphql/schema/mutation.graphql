@@ -1,7 +1,7 @@
 type Mutation {
     createUser(email: String!, name: String!, password: String!, nickName: String): User!
-    sendMessage(senderId: String!, recipientId: String!, text: String!): Message!
-
+    sendMessage(conversationId: ID! text: String!): Message!
+}
     #Friends
     sendFriendRequest(fromUserId: String!, toUserId: String!): FriendRequest!
     acceptFriendRequest(requestId: String!): User!

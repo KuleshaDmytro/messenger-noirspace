@@ -1,0 +1,10 @@
+type FriendAddedPayload {
+  userId: String!
+  friend: Friend!
+  createdAt: String!
+}
+
+type Subscription {
+  friendAdded(userId: String!): FriendAddedPayload!
+  messageAdded(conversationId: ID!): Message!
+}

@@ -1,23 +1,17 @@
-import React, { useCallback, useState } from 'react';
+import React from 'react';
 
-import { Box, IconButton, LinearProgress } from '@mui/material';
+import { Box, IconButton } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 
 import SettingsMenu from '../settingsMenu/SettingsMenu';
 import ShadowLine from '@/app/components/ShadowLine/ShadowLine';
 import SearchField from '../searchField/SearchField';
+import { useSidebarContext } from '@/app/hooks/useSidebarContext';
 
 const TopBar: React.FC = () => {
 
-    const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-    const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
-        setAnchorEl(event.currentTarget);
-    };
-
-    const handleMenuClose = () => {
-        setAnchorEl(null);
-    };
-
+    const { handleMenuOpen } = useSidebarContext();
+    
     return (
         <Box sx={{ position: "relative" }}>
             <Box
@@ -42,11 +36,7 @@ const TopBar: React.FC = () => {
                 <SearchField />
             </Box>
 
-            <SettingsMenu
-                anchorEl={anchorEl}
-                open={Boolean(anchorEl)}
-                onClose={handleMenuClose}
-            />
+            <SettingsMenu/>
 
             <ShadowLine />
         </Box>

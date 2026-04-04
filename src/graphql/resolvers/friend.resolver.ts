@@ -1,8 +1,20 @@
 import { Context } from "../context";
-import {friendService} from "../services/friend.service";
+import { pubsub } from "../lib/pubsub";
+import {createFriendAddedSubscription, friendService} from "../services/friend.service";
+import { withFilter } from "graphql-subscriptions";
 
 export const friendResolvers = {
     Query: {
         getFriends: (_: any, {id}: {id: string}, ctx: Context) => friendService.getFriends(_, {id}, ctx),
+    },
+
+    Mutation: {
+        deleteFriend: (_: any, {friendId}: {friendId: string}, ctx: Context) => friendService.deleteFriend(_, {friendId}, ctx),
+    },
+
+    Subscription: {
+        friendAdded: {
+            subscribe: createFriendAddedSubscription(),
+        },
     }
 }

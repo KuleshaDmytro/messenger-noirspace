@@ -1,6 +1,6 @@
 type Query {
     users: [User!]!
-    messages: [Message!]!
+    messages(conversationId: ID!): [Message!]!
     searchUsers(query: String!): [User!]!
     me: User!
     getFriends(id: String!): [Friend!]!

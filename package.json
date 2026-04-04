@@ -3,16 +3,20 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "cross-env HOST=0.0.0.0 next dev",
+    "ws": "ts-node --project tsconfig.ws.json ws-server.ts",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "mongo:start": "docker-compose up -d",
+    "mongo:stop": "docker-compose down"
   },
   "dependencies": {
-    "@apollo/client": "^3.13.9",
+    "@apollo/client": "^3.14.0",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
     "@fontsource/audiowide": "^5.2.7",
+    "@graphql-tools/schema": "^10.0.25",
     "@hookform/resolvers": "^5.2.1",
     "@mui/icons-material": "^7.3.1",
     "@mui/material": "^7.3.1",
@@ -21,24 +25,32 @@
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
     "graphql": "^16.11.0",
+    "graphql-redis-subscriptions": "^2.7.0",
+    "graphql-sse": "^2.5.4",
+    "graphql-ws": "^6.0.6",
     "graphql-yoga": "^5.15.1",
+    "ioredis": "^5.8.2",
     "jsonwebtoken": "^9.0.2",
     "next": "15.4.6",
     "next-auth": "^4.24.11",
     "react": "19.1.0",
     "react-dom": "19.1.0",
     "react-hook-form": "^7.62.0",
+    "ws": "^8.18.3",
     "zod": "^4.0.17"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
     "@types/bcrypt": "^6.0.0",
-    "@types/node": "^20",
+    "@types/node": "^20.19.23",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@types/ws": "^8.18.1",
+    "cross-env": "^10.1.0",
     "eslint": "^9",
     "eslint-config-next": "15.4.6",
     "prisma": "^6.14.0",
-    "typescript": "^5"
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3"
   }
 }

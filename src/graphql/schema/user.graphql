@@ -5,19 +5,22 @@ type User {
   name: String!
   nickName: String
   friends: [User!]!
+  avatar: String!
+  status: String!
   sentMessages: [Message!]!
   receivedMessages: [Message!]!
   sentFriendRequests: [FriendRequest!]!
   receivedFriendRequests: [FriendRequest!]!
+  isFriend: Boolean
 }
 
-extend type Query {
+type Query {
   users: [User!]!
   searchUsers(query: String!): [User!]!
   me: User!
 }
 
-extend type Mutation {
+type Mutation {
   createUser(
     email: String!,
     name: String!,

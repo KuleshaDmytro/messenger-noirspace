@@ -2,6 +2,11 @@ import { Context } from "../context";
 import { userService } from "../services/user.service";
 
 export const userResolvers = {
+
+  User: {
+    isFriend:  (parent: any, _args: any, ctx: Context) => userService.isFriend(parent, _args, ctx)
+  },
+
   Query: {
     users: (_: any, __: any, ctx: Context) => userService.getAll(ctx),
     me: (_: any, { id }: { id: string }, ctx: Context) => userService.getById(id, ctx),
