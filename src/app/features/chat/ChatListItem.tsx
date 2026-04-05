@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { Avatar, Typography, ListItem, ListItemAvatar, ListItemText, Box, IconButton, Tooltip } from '@mui/material';
 import ClearIcon from '@mui/icons-material/Clear';
@@ -13,6 +13,7 @@ import { ACCEPT_FRIEND_REQUEST } from '../sidebar/friends/api/acceptFriendReques
 import { DECLINE_FRIEND_REQUEST } from '../sidebar/friends/api/declineFriendRequest';
 import { SEND_FRIEND_REQUEST } from '../sidebar/friends/api/sendFriendRequest';
 import { DELETE_FRIEND } from '../sidebar/friends/api/deleteFriend';
+import { useError } from '@/app/hooks/useError';
 
 type ChatListItemProps = {
     id: string;
@@ -25,6 +26,11 @@ type ChatListItemProps = {
     isActive: boolean;
     onClick?: () => void;
 };
+
+const ACCEPT_ERROR_MSG = "Failed to accept friend request. Please try again.";
+const DECLINE_ERROR_MSG = "Failed to decline friend request. Please try again.";
+const DELETE_ERROR_MSG = "Failed to remove friend. Please try again.";
+const SEND_ERROR_MSG = "Failed to send friend request. Please try again.";
 
 const ChatListItem: React.FC<ChatListItemProps> = ({
     id,
@@ -88,6 +94,27 @@ const ChatListItem: React.FC<ChatListItemProps> = ({
     };
 
     if (!userId) return null;
+
+    const { showError, clearError } = useError();
+
+    useEffect(() => {
+        switch (true) {
+            case !!acceptError:
+                showError(acceptError, ACCEPT_ERROR_MSG);
+                break;
+            case !!declineError:
+                showError(declineError, DECLINE_ERROR_MSG);
+                break;
+            case !!deletingError:
+                showError(deletingError, DELETE_ERROR_MSG);
+                break;
+            case !!sendError:
+                showError(sendError, SEND_ERROR_MSG);
+                break;
+            default:
+                clearError();
+        }
+    }, [acceptError, declineError, deletingError, sendError]);
 
     return (
         <ListItem

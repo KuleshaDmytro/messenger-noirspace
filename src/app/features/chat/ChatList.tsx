@@ -6,6 +6,9 @@ import ChatListItem from "./ChatListItem";
 import { useRealtimeFriends } from "./hooks/useRealtimeFriends";
 import { useRouter } from "next/navigation";
 import { useDirectConversation } from "../conversation/hooks/useDirectConversation";
+import { useError } from "@/app/hooks/useError";
+
+const ERROR_MSG = "Failed to load friends. Please try again.";
 
 export const ChatList = () => {
 
@@ -25,6 +28,16 @@ export const ChatList = () => {
         router.push(`/chat/${conversationId}`);
     };
 
+    const { showError, clearError } = useError();
+    
+        useEffect(() => {
+            if (error) {
+                showError(error, ERROR_MSG);
+            } else {
+                clearError();
+            }
+        }, [error]);
+
     return (
         <Box
             style={{
@@ -32,7 +45,6 @@ export const ChatList = () => {
             }}
         >
             {loading && <LinearProgress />}
-            {error && <Box>Error loading friends</Box>}
             
             {friends.map((friendObj) => 
                 {

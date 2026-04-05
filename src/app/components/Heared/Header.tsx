@@ -11,6 +11,7 @@ import Typography from '@mui/material/Typography';
 import Image from 'next/image';
 import { Space_Grotesk } from 'next/font/google';
 import Link from 'next/link';
+import { ErrorBanner } from '../Error/ErrorBanner';
 
 const spaceGrotesk = Space_Grotesk({ 
     subsets: ['latin'], 
@@ -29,6 +30,7 @@ const Header: React.FC = () => {
         >
             <Toolbar>
 
+            <ErrorBanner />
             <Box sx={{ display: 'flex', alignItems: 'center', width: '100%', height: '100%' }}>
                 <Box sx={{ flex: 1, display: 'flex', alignItems: 'center' }}>
                     <Box

@@ -16,11 +16,12 @@ type SearchUsersVars = {
 }
 
 export const useSearchUsers = ({ query }: SearchUsersVars) => {
-    const {data, loading }= useTypedQuery<SearchUsersData, SearchUsersVars>(SEARCH_USERS, {
+    const {data, loading, error }= useTypedQuery<SearchUsersData, SearchUsersVars>(SEARCH_USERS, {
         variables: { query }
     });
     return {
         data,
-        loading
+        loading,
+        error
     };
 };

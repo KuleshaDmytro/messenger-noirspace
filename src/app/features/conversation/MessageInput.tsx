@@ -1,18 +1,31 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Box, IconButton, InputBase, Paper } from "@mui/material";
 import EmojiEmotionsOutlinedIcon from "@mui/icons-material/EmojiEmotionsOutlined";
 import AttachFileOutlinedIcon from "@mui/icons-material/AttachFileOutlined";
 import SendIcon from "@mui/icons-material/Send";
 import { useParams } from "next/navigation";
 import { useSendMessage } from "./hooks/useSendMessage";
+import { useError } from "@/app/hooks/useError";
+
+const ERROR_MSG = "Failed to send message. Please try again.";
 
 const MessageInput: React.FC = () => {
   const [message, setMessage] = useState("");
 
   const params = useParams();
   const conversationId = params.id as string;
-  const { sendMessage, loading } = useSendMessage(conversationId);
+  const { sendMessage, loading, error } = useSendMessage(conversationId);
+
+    const { showError, clearError } = useError();
+
+    useEffect(() => {
+        if (error) {
+            showError(error, ERROR_MSG);
+        } else {
+            clearError();
+        }
+    }, [error]);
 
   const handleSend = async () => {
     if (!message) return;

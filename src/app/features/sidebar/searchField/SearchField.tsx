@@ -1,18 +1,31 @@
 import {Box, InputBase,LinearProgress,Paper } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 
 import ChatListItem from '@/app/features/chat/ChatListItem';
 import { useSearchUsers } from './hooks/useSearchUsers';
 import { OverlayMenuPaper } from '@/app/components/OverlayMenuPaper/OverlayMenuPaper';
 import { useSidebarContext } from '@/app/hooks/useSidebarContext';
+import { useError } from '@/app/hooks/useError';
+
+const ERROR_MSG = "Failed to search users. Please try again.";
 
 const SearchField: React.FC = () => {
 
     const { query, setQuery, setActiveMenuView } = useSidebarContext();
 
-   const { data, loading } = useSearchUsers({ query });
+   const { data, loading, error } = useSearchUsers({ query });
+
+       const { showError, clearError } = useError();
+   
+       useEffect(() => {
+           if (error) {
+               showError(error, ERROR_MSG);
+           } else {
+               clearError();
+           }
+       }, [error]);
 
     const handleSearch = useCallback((value: string) => {
         setActiveMenuView('none');
@@ -61,9 +74,9 @@ const SearchField: React.FC = () => {
  
             {(query.trim()) && (
                 <OverlayMenuPaper>
-                    {/* {loading && (
+                    {loading && (
                         <LinearProgress />
-                    )} */}
+                    )}
                     {!loading && data?.searchUsers?.length === 0 && (
                         <Box style={{ padding: 16, textAlign: "center" }}>No results</Box>
                     )}

@@ -26,7 +26,7 @@ export default function Message({ text, isMine, createdAt, user }: MessageProps)
         />
       )}
 
-      <Box sx={{ maxWidth: "70%", position: "relative" }}>
+      <Box sx={{ maxWidth: "70%", minWidth: "80px",position: "relative" }}>
         {!isMine && (
           <Typography variant="subtitle2" sx={{ color: "error.main" }}>
             {user?.name}

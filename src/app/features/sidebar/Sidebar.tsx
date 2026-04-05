@@ -17,55 +17,6 @@ type Props = {
 };
 
 
-// const products = [
-//   {
-//     id: 1,
-//     users: [
-//       { id: 1, name: 'Alice' },
-//       { id: 2, name: 'Bob' },
-//       { id: 3, name: 'Charlie' },
-//       { id: 4, name: 'Diana' },
-//       { id: 5, name: 'Ethan' },
-//       { id: 6, name: 'Fiona' },
-//       { id: 7, name: 'George' },
-//       { id: 8, name: 'Hannah' },
-//       { id: 9, name: 'Ivan' },
-//       { id: 10, name: 'Julia' },
-//     ],
-//   },
-//   {
-//     id: 2,
-//     users: [
-//       { id: 11, name: 'Kevin' },
-//       { id: 2, name: 'Bob' },
-//       { id: 13, name: 'Michael' },
-//       { id: 14, name: 'Nina' },
-//       { id: 15, name: 'Oscar' },
-//       { id: 16, name: 'Paula' },
-//       { id: 17, name: 'Quentin' },
-//       { id: 9, name: 'Ivan' },
-//       { id: 19, name: 'Steve' },
-//       { id: 20, name: 'Tina' },
-//     ],
-//   },
-//     {
-//     id: 3,
-//     users: [
-//       { id: 11, name: 'Kevin' },
-//       { id: 2, name: 'Bob' },
-//       { id: 13, name: 'Michael' },
-//       { id: 21, name: 'Nina' },
-//       { id: 22, name: 'Oscar' },
-//       { id: 16, name: 'Paula' },
-//       { id: 17, name: 'Quentin' },
-//       { id: 9, name: 'Ivan' },
-//       { id: 23, name: 'Steve' },
-//       { id: 20, name: 'Tina' },
-//     ],
-//   },
-// ]
-
-
 export const Sidebar: React.FC<Props> = ({ onWidthChange }) => {
 
     const [query, setQuery] = useState<string>("");
@@ -90,20 +41,6 @@ export const Sidebar: React.FC<Props> = ({ onWidthChange }) => {
             setAnchorEl(null);  
         }
     };
-
-    // function getUniqueUsers(products: any) {
-    //     const map = new Map();
-
-    //     for (const { users } of products) {
-    //         for (const user of users) {
-    //         map.set(user.id, user);
-    //         }
-    //     }
-
-    //     return [...map.values()];
-    // }
-
-    // const result = getUniqueUsers(products)
   
     return(
 

@@ -18,11 +18,11 @@ export const messageService = {
       ctx: Context,
       conversationId: string,
       cursor?: string, 
-      take: number = 20 // Default value for take
+      take: number = 20 
   ) => {
       if (!ctx.session) throw new UnauthorizedError();
       await assertMember(ctx.session.id, conversationId);
-
+      
       const messages = await prisma.message.findMany({
           where: { conversationId },
           take: take + 1,

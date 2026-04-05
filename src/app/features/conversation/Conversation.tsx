@@ -9,6 +9,10 @@ import { useSession } from 'next-auth/react';
 import { useInfiniteScroll } from './hooks/useInfiniteScroll';
 import { useScrollPosition } from './hooks/useScrollPosition';
 import { useAutoScroll } from './hooks/useAutoScroll';
+import { useError } from '@/app/hooks/useError';
+
+
+const ERROR_MSG = "Failed to load messages. Please try again.";
 
 const Conversation: React.FC = () => {  
     
@@ -18,6 +22,16 @@ const Conversation: React.FC = () => {
     const containerRef = useRef<HTMLDivElement>(null!);
 
     const { messages, loading, error, hasMore, loadMore } = useChatMessages(conversationId);
+
+    const { showError, clearError } = useError();
+
+    useEffect(() => {
+        if (error) {
+            showError(error, ERROR_MSG);
+        } else {
+            clearError();
+        }
+    }, [error]);
 
     const { savePosition, restorePosition } = useScrollPosition(conversationId, containerRef);
     const { topRef } = useInfiniteScroll(hasMore, loading, loadMore, containerRef);
