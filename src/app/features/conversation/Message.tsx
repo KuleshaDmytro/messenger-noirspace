@@ -1,15 +1,5 @@
 import { Avatar, Box, Paper, Stack, Typography } from "@mui/material";
-
-export interface MessageProps {
-  text: string;
-  isMine: boolean;
-  createdAt: string | Date;
-  user?: {
-    name: string;
-    avatar?: string;
-    color?: string;
-  };
-}
+import { MessageProps } from "./types/message";
 
 export default function Message({ text, isMine, createdAt, user }: MessageProps) {
   return (
@@ -36,8 +26,8 @@ export default function Message({ text, isMine, createdAt, user }: MessageProps)
         <Paper
           sx={{
             p: 1.5,
-            bgcolor: isMine ? "primary.main" : "grey.900",
-            color: isMine ? "primary.contrastText" : "grey.100",
+            bgcolor: isMine ? "grey.800" : "primary.main",
+            color: isMine ? "grey.100" : "primary.contrastText",
             borderRadius: 3,
             position: "relative",
           }}
