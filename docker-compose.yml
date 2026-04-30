@@ -1,7 +1,4 @@
-version: '3.9'
-
 services:
-  # === MongoDB ===
   mongo:
     image: mongo:7
     container_name: mongo
@@ -28,7 +25,6 @@ services:
         '
       "
 
-  # === Redis (PubSub transport) ===
   redis:
     image: redis:7-alpine
     container_name: redis
@@ -36,36 +32,4 @@ services:
       - "6379:6379"
     volumes:
       - ./data/redis:/data
-    restart: unless-stopped
-
-  # === GraphQL API (Yoga) ===
-  yoga:
-    build: .
-    container_name: yoga
-    command: ["npm", "run", "dev:yoga"] # або твоя команда
-    environment:
-      - MONGO_URI=mongodb://mongo:27017/your-db-name
-      - REDIS_HOST=redis
-      - REDIS_PORT=6379
-    ports:
-      - "4000:4000" # або порт твого Yoga API
-    depends_on:
-      - mongo
-      - redis
-    restart: unless-stopped
-
-  # === WebSocket сервер (Subscriptions) ===
-  ws:
-    build: .
-    container_name: ws
-    command: ["npm", "run", "dev:ws"] # або твоя команда
-    environment:
-      - MONGO_URI=mongodb://mongo:27017/your-db-name
-      - REDIS_HOST=redis
-      - REDIS_PORT=6379
-    ports:
-      - "4001:4001" # порт WS сервера
-    depends_on:
-      - mongo
-      - redis
     restart: unless-stopped

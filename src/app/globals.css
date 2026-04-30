@@ -3,6 +3,13 @@
   --foreground: #171717;
 }
 
+@font-face {
+  font-family: 'Audiowide';
+  src: url('../app/fonts/Audiowide-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
