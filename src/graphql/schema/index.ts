@@ -6,9 +6,6 @@ import { makeExecutableSchema } from '@graphql-tools/schema';
 const schemaPath = path.join(process.cwd(), 'src/graphql/schema');
 
 export const typeDefs = [
-  // readFileSync(path.join(schemaPath, 'base.graphql'), 'utf8'),
-  // readFileSync(path.join(schemaPath, 'query.graphql'), 'utf8'),
-  // readFileSync(path.join(schemaPath, 'mutation.graphql'), 'utf8'),
   readFileSync(path.join(schemaPath, 'subscription.graphql'), 'utf8'),
   readFileSync(path.join(schemaPath, 'user.graphql'), 'utf8'),
   readFileSync(path.join(schemaPath, 'friend.graphql'), 'utf8'),

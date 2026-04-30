@@ -6,8 +6,6 @@ export const config = {
   api: { bodyParser: false },
 };
 
-console.log(`YOGA`, schema.getSubscriptionType()?.getFields());
-
 export const yoga = createYoga({
   schema,
   context: createContext,
