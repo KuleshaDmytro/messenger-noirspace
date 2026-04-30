@@ -1,1 +1,0 @@
-// DELETE THIS FILE, IT'S NOT USED ANYWHERE. THE requireAuth FUNCTION IS NOW IN src/graphql/lib/guards.ts
