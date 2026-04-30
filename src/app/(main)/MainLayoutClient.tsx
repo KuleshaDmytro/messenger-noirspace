@@ -5,9 +5,11 @@ import Box from "@mui/material/Box";
 import Header from "../components/Heared/Header";
 import { Sidebar } from "../features/sidebar/Sidebar";
 import BgImg from '../../../public/bg.jpg';
+import { useTokenSync } from "../hooks/useTokenSync";
 
 export default function MainLayoutClient({ children }: { children: React.ReactNode }) {
   const [sidebarWidth, setSidebarWidth] = useState(300);
+  useTokenSync();
 
   return (
       <Box

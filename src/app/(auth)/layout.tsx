@@ -1,6 +1,5 @@
 "use client"
 import { Alert, Box, Container, Paper, Slide, Typography } from "@mui/material";
-import '@fontsource/audiowide';
 import { AuthErrorProvider, useAuthError } from "../lib/auth/AuthErrorContext";
 import { useEffect, useState } from "react";
 
@@ -15,7 +14,7 @@ function AuthShell({ children }: { children: React.ReactNode }) {
 
         const timer = setTimeout(() => {
             setOpen(false)
-        }, 3000);
+        }, 5000);
 
         return () => clearTimeout(timer);
     }, [error]);
@@ -39,12 +38,12 @@ function AuthShell({ children }: { children: React.ReactNode }) {
             >
                 <Box
                     sx={{
-                    position: "absolute",
-                    top: 24,
-                    left: 0,
-                    right: 0,
-                    zIndex: 10,
-                    px: 3,
+                      position: "absolute",
+                      top: 24,
+                      left: 0,
+                      right: 0,
+                      zIndex: 10,
+                      px: 3,
                     }}
                 >
                     <Alert severity="error"  onClose={() => setError(null)}>
@@ -60,7 +59,7 @@ function AuthShell({ children }: { children: React.ReactNode }) {
             variant="h4"
             mb={2}
             align="center"
-            fontFamily={"Audiowide, cursive"}
+            fontFamily={"Audiowide"}
           >
             NoirSpace Messenger
           </Typography>

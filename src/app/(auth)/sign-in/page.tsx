@@ -10,9 +10,7 @@ import {
     TextField,
     Typography,
     Paper,
-    Alert,
 } from "@mui/material";
-import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { authErrorMessages } from "@/app/lib/auth/errors";
 import { useAuthError } from "@/app/lib/auth/AuthErrorContext";
@@ -34,49 +32,45 @@ const {
 });
 
 const { setError } = useAuthError();
-// const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
-const onSubmit = async (data: LoginFormValues) => {
-    setError(null);
+    const onSubmit = async (data: LoginFormValues) => {
+        setError(null);
 
-    const res = await signIn("credentials", {
-        email: data.email,
-        password: data.password,
-        redirect: false,
-        callbackUrl: "/chat" // після входу
-    });
+        const res = await signIn("credentials", {
+            email: data.email,
+            password: data.password,
+            redirect: false,
+            callbackUrl: "/chat"
+        });
 
-    if (res?.status === 200) {
-        router.push("/chat")
-    }
-  
-    if (res?.error) {
-        const message =
-            authErrorMessages[res.error] ?? authErrorMessages.Default;
-        setError(message);
-        return;
-    }
-};
+        if (res?.status === 200) {
+            router.push("/chat")
+        }
+    
+        if (res?.error) {
+            const message =
+                authErrorMessages[res.error] ?? authErrorMessages.Default;
+            setError(message);
+            return;
+        }
+    };
 
-return (
+    return (
         <Container maxWidth="xs">
             <Paper
                 elevation={3}
                 sx={{
                     p: 4,
                     mt: 4,
-                    // backgroundColor: theme.palette.background.paper,
-                    // borderRadius: theme.shape.borderRadius,
                 }}
             >
                 
                 <Typography
                     align="center"
                     gutterBottom
-                    fontFamily={'Audiowide, cursive'}
+                    fontFamily={'Audiowide'}
                     fontSize={24}
-                    // sx={{ color: theme.palette.primary.main }}
                 >
                     Sign-in
                 </Typography>
@@ -98,7 +92,6 @@ return (
                         fullWidth
                         sx={{
                             "& .MuiInputBase-root": {
-                                // backgroundColor: theme.palette.background.default,
                             },
                         }}
                     />
@@ -110,11 +103,7 @@ return (
                         helperText={errors.password?.message}
                         autoComplete="current-password"
                         fullWidth
-                        sx={{
-                            "& .MuiInputBase-root": {
-                                // backgroundColor: theme.palette.background.default,
-                            },
-                        }}
+
                     />
                     <Button
                         type="submit"
@@ -124,15 +113,17 @@ return (
                         fullWidth
                         sx={{
                             mt: 2,
-                            fontFamily: 'Audiowide, cursive',
-                            fontSize: 16,
-
-                            "&:hover": {
-                                // backgroundColor: theme.palette.primary.dark,
-                            },
                         }}
                     >
-                        Sign-in
+                        <span
+                            style={{
+                                fontFamily: 'Audiowide',
+                                fontWeight: 'regular',
+                                fontSize: 16,
+                            }}
+                        >
+                            Sign-in
+                        </span>
                     </Button>
                     <Button
                         variant="outlined"
@@ -140,18 +131,18 @@ return (
                         fullWidth
                         sx={{
                             mt: 1,
-                            // borderColor: theme.palette.secondary.main,
-                            // color: theme.palette.secondary.main,
-                            fontFamily: 'Audiowide, cursive',
-                            fontSize: 16,
-                            "&:hover": {
-                                // borderColor: theme.palette.secondary.dark,
-                                // color: theme.palette.secondary.dark,
-                            },
                         }}
                         href="/registration"
                     >
-                        Sign-up
+                        <span
+                            style={{
+                                fontFamily: 'Audiowide',
+                                fontWeight: 'regular',
+                                fontSize: 16,
+                            }}
+                        >
+                            Sign-up
+                        </span>
                     </Button>
                 </Box>
             </Paper>

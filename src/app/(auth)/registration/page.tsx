@@ -1,6 +1,4 @@
 'use client';
-import { signIn } from "next-auth/react";
-
 import React from "react";
 import { useForm } from "react-hook-form";
 
@@ -32,8 +30,6 @@ const schema = z.object({
 });
 
 type RegistrationForm = z.infer<typeof schema>;
- 
-
 
 export default function RegistrationPage() {
     const {
@@ -162,11 +158,17 @@ export default function RegistrationPage() {
                     sx={{ 
                         mt: 2, 
                         backgroundColor: '#FFD700',
-                        fontFamily: 'Audiowide, cursive',
-                        fontSize: 16, 
                     }}
                 >
-                    Sign-up
+                    <span
+                        style={{
+                            fontFamily: 'Audiowide',
+                            fontWeight: 'regular',
+                            fontSize: 16,
+                        }}
+                    >
+                        Sign-up
+                   </span>
                 </Button>
 
                 <Button
@@ -174,13 +176,19 @@ export default function RegistrationPage() {
                     color="secondary"
                     fullWidth
                     sx={{ 
-                        mt: 2,
-                        fontFamily: 'Audiowide, cursive',
-                        fontSize: 16, 
+                        mt: 2, 
                     }}
                     href="/sign-in"
                 >
-                    Back to Sign-in
+                   <span
+                        style={{
+                            fontFamily: 'Audiowide',
+                            fontWeight: 'regular',
+                            fontSize: 16,
+                        }}
+                    >
+                        Back to Sign-in
+                    </span>
                 </Button>
                 </Grid>
             </form>

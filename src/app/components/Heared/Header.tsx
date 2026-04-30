@@ -1,17 +1,16 @@
+'use client'
 import React from 'react';
-import routes from '@/app/routes/routes';
-import Logo from '../../../../public/vercel.svg';
 
-import Button from '@mui/material/Button';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 
-import Image from 'next/image';
 import { Space_Grotesk } from 'next/font/google';
-import Link from 'next/link';
 import { ErrorBanner } from '../Error/ErrorBanner';
+import { signOut } from 'next-auth/react';
+import { useApolloClient } from '@apollo/client';
+import { Button } from '@mui/material';
 
 const spaceGrotesk = Space_Grotesk({ 
     subsets: ['latin'], 
@@ -19,7 +18,21 @@ const spaceGrotesk = Space_Grotesk({
     variable: '--font-space-grotesk',
 });
 
-const Header: React.FC = () => {
+const Header = () => {
+    const client = useApolloClient();
+
+    const handleClick = async () => {
+        await client.clearStore();
+
+        sessionStorage.removeItem("accessToken");
+        sessionStorage.removeItem("refreshToken");
+
+        await signOut({ 
+            callbackUrl: "/sign-in",
+            redirect: true 
+        });
+    };
+
     return (
         <AppBar
             position="static"
@@ -33,47 +46,23 @@ const Header: React.FC = () => {
             <ErrorBanner />
             <Box sx={{ display: 'flex', alignItems: 'center', width: '100%', height: '100%' }}>
                 <Box sx={{ flex: 1, display: 'flex', alignItems: 'center' }}>
-                    <Box
-                        sx={{
-                            position: 'relative',
-                            width: 40,
-                            height: 40,
-                            borderRadius: '50%',
-                            overflow: 'hidden',
-                            boxShadow: '0 0 0 3px #0b0d16ff',
-                            '&::before': {
-                                content: '""',
-                                position: 'absolute',
-                                top: 0,
-                                left: 0,
-                                width: '100%',
-                                height: '100%',
-                                borderRadius: '50%',
-                                zIndex: 1,
-                                pointerEvents: 'none',
-                                background: 'radial-gradient(circle, #07080E 40%, #0D0D0D 100%)',
-                                filter: 'blur(8px)',
-                            },
-                        }}
+                    <Typography
+                        variant="h5"
                     >
-                        <Image
-                            src={Logo}
-                            alt="Logo"
-                            width={40}
-                            height={40}
+                        <span
                             style={{
-                                borderRadius: '50%',
-                                objectFit: 'cover',
-                                position: 'relative',
-                                zIndex: 2,
+                                fontFamily: 'Audiowide',
+                                fontWeight: 'regular',
+                                userSelect: 'none',
                             }}
-                        />
-                    </Box>
+                        >
+                            Noir Space
+                        </span>
+                        </Typography>
                 </Box>
 
                 <Box sx={{ flex: 1, display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
-                    <Link
-                        href={routes.signIn}
+                    <Button
                         style={{
                             color: 'inherit',
                             textDecoration: 'none',
@@ -81,6 +70,7 @@ const Header: React.FC = () => {
                             marginRight: 1,
                             transition: 'background 0.2s, color 0.2s'
                         }}
+                        onClick={handleClick}
                     >
                         <Typography
                             variant="body2"
@@ -94,9 +84,9 @@ const Header: React.FC = () => {
                                 cursor: 'pointer'
                             }}
                         >
-                             SIGN IN
+                             SIGN OUT
                         </Typography>
-                    </Link>
+                    </Button>
                 </Box>
             </Box>
               
