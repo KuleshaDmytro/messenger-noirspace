@@ -1,24 +1,26 @@
 import { prisma } from "../../app/lib/prisma";
 import bcrypt from "bcrypt";
 import { Context } from "../context";
-import { UnauthorizedError } from "../errors/UnauthorizedError";
+import { requireAuth } from "../lib/guards";
 
 export const userService = {
   getAll: (ctx: Context) => {
-    if (!ctx.session) throw new UnauthorizedError();
+    requireAuth(ctx);
     return prisma.user.findMany({ where: { nickName: { not: undefined } } });
   },
 
   getById: (id: string, ctx: Context) => {
-    if (!ctx.session) throw new UnauthorizedError();
+    requireAuth(ctx);
 
     return prisma.user.findUnique({ where: { id } });
   },
 
   search: async (query: string, ctx: Context) => {
-    if (!ctx.session) throw new UnauthorizedError();
+    const session = requireAuth(ctx);
+
     if (!query.trim()) return []; 
-    const currentUserId = ctx.session.id;
+    
+    const currentUserId = session.id;
 
     const users = prisma.user.findMany({
       where: {
@@ -37,7 +39,7 @@ export const userService = {
   },
 
   create: async (email: string, name: string, password: string, nickName: string, ctx: Context) => {
-    if (!ctx.session) throw new UnauthorizedError();
+    requireAuth(ctx);
 
     const existing = await prisma.user.findUnique({ where: { email } });
     if (existing) throw new Error("User already exists");
@@ -51,7 +53,8 @@ export const userService = {
 
  isFriend: async (parent: any, _args: any, ctx: Context) => {
       try {
-        const currentUserId = ctx.session?.id;
+        const session = requireAuth(ctx);
+        const currentUserId = session?.id;
         if (!currentUserId) return false;
 
         if (parent.id === currentUserId) return false;

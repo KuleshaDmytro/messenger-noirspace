@@ -1,8 +1,8 @@
 import { withFilter } from "graphql-subscriptions";
 import { prisma } from "../../app/lib/prisma";
 import { Context } from "../context";
-import { UnauthorizedError } from "../errors/UnauthorizedError";
 import { pubsub } from "../lib/pubsub";
+import { requireAuth } from "../lib/guards";
 
 const MESSAGE_ADDED = "MESSAGE_ADDED";
 
@@ -20,8 +20,8 @@ export const messageService = {
       cursor?: string, 
       take: number = 20 
   ) => {
-      if (!ctx.session) throw new UnauthorizedError();
-      await assertMember(ctx.session.id, conversationId);
+      const session = requireAuth(ctx);
+      await assertMember(session.id, conversationId);
       
       const messages = await prisma.message.findMany({
           where: { conversationId },
@@ -44,8 +44,8 @@ export const messageService = {
   },
 
   send: async (ctx: Context, conversationId: string, text: string) => {
-    if (!ctx.session) throw new UnauthorizedError();
-    const senderId = ctx.session.id;
+    const session = requireAuth(ctx);
+    const senderId = session.id;
 
     await assertMember(senderId, conversationId);
 
@@ -64,8 +64,25 @@ export const messageService = {
 
 export const createMessageAddedSubscription = () =>
   withFilter(
-    () => pubsub.asyncIterator(MESSAGE_ADDED),
-    (payload, variables) => {
-      return payload.conversationId === variables.conversationId;
+    (_: any, __: any, ctx: Context | undefined) => {
+      requireAuth(ctx!);
+      return pubsub.asyncIterator(MESSAGE_ADDED);
+    },
+    async (payload, variables, ctx: Context | undefined) => {
+      if (!ctx?.session) return false;
+
+      const member = await prisma.conversationMember.findUnique({
+        where: {
+          conversationId_userId: {
+            conversationId: variables.conversationId,
+            userId: ctx.session.id,
+          },
+        },
+      });
+
+      return (
+        payload.conversationId === variables.conversationId &&
+        member !== null
+      );
     }
   );

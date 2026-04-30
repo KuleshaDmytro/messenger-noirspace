@@ -1,11 +1,11 @@
 import { prisma } from "../../app/lib/prisma";
+import { requireAuth } from "../lib/guards";
 import { Context } from "../context";
-import { UnauthorizedError } from "../errors/UnauthorizedError";
 import { friendService } from "./friend.service";
 
 export const friendRequestService = {
     friendsRequests: (_: any, { id }: { id: string }, ctx: Context) => {
-        if (!ctx.session) throw new UnauthorizedError();
+        requireAuth(ctx);
 
         return prisma.friendRequest.findMany({
         where: {
@@ -19,7 +19,7 @@ export const friendRequestService = {
     },
 
     sendFriendRequest: async (_: any, args: { fromUserId: string; toUserId: string;}, ctx: Context) => {
-        if (!ctx.session) throw new UnauthorizedError();
+        requireAuth(ctx);
 
         const fromUser = await prisma.user.findUnique({ where: { id: args.fromUserId } });
         if (!fromUser) {
@@ -49,7 +49,8 @@ export const friendRequestService = {
     },
 
     acceptFriendRequest: async (_: any, args: { requestId: string }, ctx: Context) => {
-        if (!ctx.session) throw new UnauthorizedError();        
+        requireAuth(ctx);
+
         const request = await prisma.friendRequest.findUnique({ where: { id: args.requestId } });
 
         if (!request) throw new Error("Friend request not found");
@@ -101,7 +102,7 @@ export const friendRequestService = {
     },
 
     declineFriendRequest: async (_: any, args: { requestId: string }, ctx: Context) => {
-        if (!ctx.session) throw new UnauthorizedError();
+        requireAuth(ctx);
 
         const request = await prisma.friendRequest.findUnique({ where: { id: args.requestId } });
         if (!request) {

@@ -1,13 +1,13 @@
 import { prisma } from "../../app/lib/prisma";
 import { Context } from "../context";
-import { UnauthorizedError } from "../errors/UnauthorizedError";
+import { requireAuth } from "../lib/guards";
 
 const makeDirectKey = (a: string, b: string) => (a < b ? `${a}:${b}` : `${b}:${a}`);
 
 export const conversationService = {
   getOrCreateDirect: async (ctx: Context, friendId: string) => {
-    if (!ctx.session) throw new UnauthorizedError();
-    const meId = ctx.session.id;
+    const session = requireAuth(ctx);
+    const meId = session.id;
 
     if (meId === friendId) throw new Error("You cannot chat with yourself");
 

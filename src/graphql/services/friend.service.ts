@@ -1,28 +1,28 @@
 import { prisma } from "../../app/lib/prisma";
 
 import { Context } from "../context";
-import { FRIEND_ADDED } from "../events";
 
 import { withFilter } from "graphql-subscriptions";
 import { pubsub } from "../lib/pubsub";
+import { requireAuth } from "../lib/guards";
 
 export const friendService = {
   getFriends: (_: any, {id}: {id: string}, ctx: Context) => {
-      if (!ctx.session) throw new Error("Unauthorized");
+    requireAuth(ctx);
 
-      const friends = prisma.friend.findMany({
-            where: { userId: id },
-            include: { 
-              friend: true 
-            },
-            orderBy: { createdAt: "desc" },
-          });
-      return friends;
+    const friends = prisma.friend.findMany({
+          where: { userId: id },
+          include: { 
+            friend: true 
+          },
+          orderBy: { createdAt: "desc" },
+        });
+    return friends;
   },
 
   deleteFriend: async (_: any, {friendId}: {friendId: string}, ctx: Context) => {
-    if (!ctx.session) throw new Error("Unauthorized");
-    const userId = ctx.session.id;
+    const session = requireAuth(ctx);
+    const userId = session.id;
 
     const result = await prisma.friend.deleteMany({
       where: {
@@ -58,8 +58,16 @@ export const friendService = {
 
 export const createFriendAddedSubscription = () =>
   withFilter(
-    () => pubsub.asyncIterator('friendAdded'),
-    (payload, variables) => {
-      return String(payload.friendAdded.userId) === String(variables.userId);
+    (_: any, __: any, ctx: Context | undefined) => {
+      requireAuth(ctx);
+      return pubsub.asyncIterator("friendAdded");
+    },
+    (payload, variables, ctx: Context | undefined) => {
+      if (!ctx?.session) return false;
+
+      return (
+        String(payload.friendAdded.userId) === String(variables.userId) &&
+        String(variables.userId) === String(ctx.session.id)
+      );
     }
   );
