@@ -1,7 +1,5 @@
 import { Context } from "../context";
-import { pubsub } from "../lib/pubsub";
 import {createFriendAddedSubscription, friendService} from "../services/friend.service";
-import { withFilter } from "graphql-subscriptions";
 
 export const friendResolvers = {
     Query: {
@@ -14,7 +12,8 @@ export const friendResolvers = {
 
     Subscription: {
         friendAdded: {
-            subscribe: createFriendAddedSubscription(),
+            subscribe: (parent: any, args: any, ctx: Context) =>
+            createFriendAddedSubscription()(parent, args, ctx),
         },
     }
 }

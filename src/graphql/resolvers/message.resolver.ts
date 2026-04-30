@@ -1,10 +1,5 @@
 import { Context } from "../context";
-import { pubsub } from "../lib/pubsub";
 import { createMessageAddedSubscription, messageService } from "../services/message.service";
-import { withFilter } from "graphql-subscriptions";
-
-const MESSAGE_ADDED = "MESSAGE_ADDED";
-const TAKE = 20; 
 
 export const messageResolvers = {
   Query: {
@@ -19,7 +14,8 @@ export const messageResolvers = {
 
   Subscription: {
     messageAdded: {
-      subscribe: createMessageAddedSubscription(),
+      subscribe: (parent: any, args: any, ctx: Context) => 
+        createMessageAddedSubscription()(parent, args, ctx),
     },
   }
 };
